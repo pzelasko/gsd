@@ -1,0 +1,16 @@
+#!/usr/bin/env python
+
+import click
+import subprocess
+
+
+@click.command()
+def main():
+    subprocess.run('')
+    """
+    for x in exp/{mono,tri,chain/tdnn}*/decode*; do printf "$x    \t"; cat $x/wer_* | utils/best_wer.sh; done
+    """
+
+
+if __name__ == '__main__':
+    main()
