@@ -14,8 +14,7 @@ def main(segments):
         durations.append(end - begin)
     durations = pd.DataFrame(durations)
     total = float(durations.sum())
-    print('Total duration:', total, 'seconds')
-    print('Total duration:', total / 3600, 'hours')
+    print('Total duration:', total, 'seconds == ', total / 3600, 'hours')
     print('Statistics:')
     print(durations.describe())
 
