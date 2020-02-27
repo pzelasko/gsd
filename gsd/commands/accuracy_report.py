@@ -5,7 +5,7 @@ import pandas as pd
 
 
 @click.command()
-@click.argument('accuracy.report', type=click.Path(exists=True))
+@click.argument('report', type=click.Path(exists=True))
 def main(report):
     df = pd.read_csv(report, sep='\t')
     df = df[:-1]
