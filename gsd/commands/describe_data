@@ -25,6 +25,8 @@ def divider(width=80):
 
 
 def show_segment_duration_statistics(segments: Path):
+    if not segments.exists():
+        print('No segments file available')
     durations = []
     with open(segments) as f:
         for line in f:
@@ -34,11 +36,11 @@ def show_segment_duration_statistics(segments: Path):
     if not durations:
         print(f'There are no segments in {segments}')
         return
-    durations = pd.DataFrame(durations)
+    durations = pd.DataFrame({'Duration [s]': durations})
     total = float(durations.sum())
     print('Total duration:', total, 'seconds == ', total / 3600, 'hours')
     print('Number of segments:', len(durations))
-    print('Statistics:')
+    print('Segment statistics:')
     print(durations.describe())
 
 
