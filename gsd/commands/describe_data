@@ -12,7 +12,7 @@ def main(data_dir):
     divider()
     print('Describing', data_dir)
     divider()
-    print('Contents:', list(data_dir.glob('*')))
+    print('Contents:', *[p.name for p in data_dir.glob('*')])
     divider()
     show_number_of_speakers(data_dir)
     divider()
