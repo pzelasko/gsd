@@ -27,6 +27,9 @@ def show_segment_duration_statistics(segments: Path):
             parts = line.strip().split()
             begin, end = float(parts[2]), float(parts[3])
             durations.append(end - begin)
+    if not durations:
+        print(f'There are no segments in {segments}')
+        return
     durations = pd.DataFrame(durations)
     total = float(durations.sum())
     print('Total duration:', total, 'seconds == ', total / 3600, 'hours')
