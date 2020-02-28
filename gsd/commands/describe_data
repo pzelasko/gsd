@@ -10,6 +10,10 @@ import pandas as pd
 def main(data_dir):
     data_dir = Path(data_dir)
     divider()
+    print('Describing', data_dir)
+    divider()
+    print('Contents:', list(data_dir.glob('*')))
+    divider()
     show_number_of_speakers(data_dir)
     divider()
     show_segment_duration_statistics(data_dir / 'segments')
