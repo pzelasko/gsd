@@ -1,2 +1,1 @@
-# TODO: distribute
-# policy: local, distributed (like ProcessPool)
+from .job import run_jobs
