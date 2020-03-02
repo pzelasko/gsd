@@ -27,6 +27,7 @@ def divider(width=80):
 def show_segment_duration_statistics(segments: Path):
     if not segments.exists():
         print('No segments file available')
+        return
     durations = []
     with open(segments) as f:
         for line in f:
