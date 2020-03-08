@@ -10,6 +10,10 @@ import pandas as pd
 @click.command()
 @click.argument('report', type=click.Path(exists=True))
 def main(report):
+    """
+    Reads the accuracy.report file in Kaldi's nnet training directory and plots the loss curves.
+    Most useful when performing X11 SSH forwarding.
+    """
     df = pd.read_csv(report, sep='\t')
     df = df[:-1]
     df[['train_objective', 'valid_objective']].plot()
