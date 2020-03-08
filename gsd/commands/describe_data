@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+import re
+from collections import Counter
 from pathlib import Path
 
 import click
@@ -15,6 +17,8 @@ def main(data_dir):
     print('Contents:', *[p.name for p in data_dir.glob('*')])
     divider()
     show_number_of_speakers(data_dir)
+    divider()
+    show_words_analysis(data_dir / 'text')
     divider()
     show_segment_duration_statistics(data_dir / 'segments')
     divider()
@@ -56,6 +60,20 @@ def show_number_of_speakers(data_dir: Path):
         print('Number of speakers unknown: no spk2utt or utt2spk file present.')
         return
     print('Number of speakers:', num_spk)
+
+
+def show_words_analysis(text: Path):
+    if not text.exists():
+        print('No "text" file found')
+        return
+    words = Counter()
+    with text.open() as f:
+        for line in f:
+            words.update(line.strip().split()[1:])
+    print('Number of unique words:', len(words))
+    print('Total number of words:', sum(words.values()))
+    brackets = re.compile(r'[<\[].+[>\]]')
+    print('Symbols in brackets:', *[w for w in words if brackets.match(w)])
 
 
 if __name__ == '__main__':

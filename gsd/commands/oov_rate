@@ -1,0 +1,50 @@
+#!/usr/bin/env python
+from collections import Counter
+from itertools import chain
+from pathlib import Path
+from pprint import pprint
+
+import click
+
+
+@click.command()
+@click.argument('train', type=click.Path(exists=True, file_okay=False))
+@click.argument('eval', type=click.Path(exists=True, file_okay=False))
+@click.option('-n', '--n-most-common', default=20, type=int,
+              help='This many most common OOV symbols will be shown (0 -> all)')
+def main(train: str, eval: str, n_most_common: int):
+    """Reads the text files from TRAIN and EVAL directories and check what are the OOV symbols in EVAL given TRAIN."""
+    train, eval = Path(train) / 'text', Path(eval) / 'text'
+
+    for x in (train, eval):
+        if not x.exists():
+            raise ValueError("No such file:", x)
+
+    if n_most_common < 1:
+        n_most_common = None
+
+    train_text = read_text(train)
+    eval_text = read_text(eval)
+
+    oovs = set(eval_text) - set(train_text)
+    if not oovs:
+        print('There are no OOV symbols.')
+        return
+    total_oovs = sum(eval_text[w] for w in oovs)
+    total_words = sum(eval_text.values())
+    print(f'There are {total_oovs} OOV word instances out of {total_words} words '
+          f'in the eval data ({total_oovs / total_words:.2%}).')
+    print('Breakdown by each symbol:')
+    eval_text = Counter({k: v for k, v in eval_text.items() if k in oovs})
+    pprint([(w, v) for w, v in eval_text.most_common(n_most_common)])
+    if n_most_common is not None and len(eval_text) - n_most_common > 0:
+        print(f'... there are {len(eval_text) - n_most_common} more (use -n option).')
+
+
+def read_text(text: Path) -> Counter:
+    with text.open() as f:
+        return Counter(chain.from_iterable(line.strip().split()[1:] for line in f))
+
+
+if __name__ == '__main__':
+    main()
